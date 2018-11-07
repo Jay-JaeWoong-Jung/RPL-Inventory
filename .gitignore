@@ -1,4 +1,5 @@
 */*.json
 */node_modules
 */.jshintrc
+*/*.jshint
 */package-lock.json
