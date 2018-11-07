@@ -34,7 +34,7 @@ const sampleJSON = [
         part_number: "132",
         quantity: "27"
     }
-]
+];
 
 //validates the JSON format in the request body
 // all 4 key and value pairs are required and must not be empty
@@ -51,13 +51,8 @@ function validateEntryFormat(entry) {
 
 //returns true if the entry combination of item_name, part_number, and vendor exists
 function getEntry(input) {
-    const entry = inventoryDB.find(c => 
-        c.item_name === input.item
-        && (c.part_number === input.part_number) 
-        && (c.vendor === input.vendor) 
-    );
-
-    return entry;
+     
+    return inventoryDB.find(c => (c.item_name === input.item) && (c.part_number === input.part_number) && (c.vendor === input.vendor) );
 }
 function updateEntryQuantity(currEntry, newEntry) {
     currEntry.quantity = parseInt(currEntry.quantity) + parseInt(newEntry.quantity);
@@ -96,6 +91,3 @@ app.post(BASE_URL, (req, res) => {
         
 
 });
-
-
-app.put
