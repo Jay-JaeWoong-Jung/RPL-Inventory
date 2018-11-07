@@ -94,7 +94,7 @@ function validateCourse(course) {
     const schema = {
         name: Joi.string().min(3).required()
     };
-eturn Joi.validate(course, schema);
+    return Joi.validate(course, schema);
 }
 
 const port = process.env.PORT ||3000;
