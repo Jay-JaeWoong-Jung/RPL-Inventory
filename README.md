@@ -10,8 +10,8 @@ Inventory system for USC Rocket Propulsion Lab
   2. `npm init --yes`
   3. `npm i express`
 
-### Debugging: jshHint
+### Debugging: Jshint
 * Install jshint and ignore es6
-  1. `npm i jshint`
+  1. `npm i -g jshint`
   2. `touch .jshint`
-  3.  Eidt .jshint by including `{"esversion":6}`
+  3.  Edit .jshint by including `{"esversion":6}`
