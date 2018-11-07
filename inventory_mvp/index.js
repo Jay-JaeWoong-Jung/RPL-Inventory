@@ -36,7 +36,9 @@ const sampleJSON = [
     }
 ]
 
-
+//validates the JSON format in the request body
+// all 4 key and value pairs are required and must not be empty
+// part_number is being treated as a string
 function validateEntryFormat(entry) {
     const schema = {
         item: Joi.string().min(1).required(),//non empty requirement
@@ -47,21 +49,25 @@ function validateEntryFormat(entry) {
     return Joi.validate(entry, schema);
 }
 
-function isInputEntryUnique(input) {
+//returns true if the entry combination of item_name, part_number, and vendor exists
+function getEntry(input) {
     const entry = inventoryDB.find(c => 
         c.item_name === input.item
         && (c.part_number === input.part_number) 
         && (c.vendor === input.vendor) 
     );
 
-    if(entry) return false;
-    else return true;
+    return entry;
+}
+function updateEntryQuantity(currEntry, newEntry) {
+    currEntry.quantity = parseInt(currEntry.quantity) + parseInt(newEntry.quantity);
 }
 
+//add a new entry API route
 app.post(BASE_URL, (req, res) => {
     const {error} = validateEntryFormat(req.body);
     if(error) return res.status(404).send(error.details[0].message); 
-    if(!isInputEntryUnique(req.body))
+    if(getEntry(req.body))
         return res.status(404).send('the entry combination of item, vendor, and part# already exists. Try updating an existing entry');
 
     const entry = {
@@ -73,6 +79,21 @@ app.post(BASE_URL, (req, res) => {
     };
     inventoryDB.push(entry);
     res.send(inventoryDB);
+
+});
+
+//update an entry's quantity API route
+    //app.put(BASE_URL + '/:item', (req, res) => {
+    app.put(BASE_URL, (req, res) => {
+        const {error} = validateEntryFormat(req.body);
+        if(error) return res.status(404).send(error.details[0].message);
+        const entry = getEntry(req.body);
+        if(!entry)
+            return res.status(404).send('the entry combination does not exist. consider posting a new entry');
+        
+        updateEntryQuantity(entry, req.body);
+        res.send(inventoryDB);
+        
 
 });
 
